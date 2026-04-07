@@ -3,31 +3,5 @@ import ApplicationLogo from '@/Components/ApplicationLogo.vue';
 </script>
 
 <template>
-    <!-- <pre>{{ $page.props.user }}</pre> -->
-    <div>
-        <button
-            v-if="$page.props.user.permissions.some(p => p.trim() === 'create role')">
-            Create Role
-        </button>
-
-        <button
-            v-if="$page.props.user.permissions.some(p => p.trim() === 'create lesson')">
-            Create New Lesson
-        </button>
-    </div>
+    <h1 class="md:grid md:grid-cols-3 md:gap-6 py-5 max-w-7xl mx-auto sm:px-6 lg:px-8"> Welcome to SpeakSmarter!</h1>
 </template>
-
-<style>
-    button {
-        background-color: #4CAF50; /* Green */
-        border: none;
-        color: white;
-        padding: 15px 32px;
-        text-align: center;
-        text-decoration: none;
-        display: inline-block;
-        font-size: 16px;
-        margin: 4px 2px;
-        cursor: pointer;
-    }
-</style>
