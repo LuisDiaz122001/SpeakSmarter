@@ -37,6 +37,7 @@ const selectedCategoryCount = computed(() => props.form.category_ids?.length ?? 
 const attachedResources = computed(() =>
     [props.form.image_uri, props.form.content_uri, props.form.pdf_uri].filter(Boolean).length,
 );
+const priceHint = computed(() => props.form.is_free ? 'This lesson will be shown as free in the public catalog.' : 'Add the public price so visitors can compare lessons before signing in.');
 </script>
 
 <template>
@@ -130,6 +131,23 @@ const attachedResources = computed(() =>
                             </div>
 
                             <div>
+                                <InputLabel for="price" value="Public price" />
+                                <TextInput
+                                    id="price"
+                                    v-model="form.price"
+                                    type="number"
+                                    step="0.01"
+                                    min="0"
+                                    autocomplete="off"
+                                    class="workspace-input mt-2 block w-full rounded-2xl px-4 py-3"
+                                />
+                                <p class="mt-3 text-sm leading-6 text-slate-500">
+                                    {{ priceHint }}
+                                </p>
+                                <InputError :message="$page.props.errors.price" class="mt-2" />
+                            </div>
+
+                            <div>
                                 <InputLabel for="level_id" value="Level" />
                                 <select
                                     id="level_id"
@@ -185,6 +203,10 @@ const attachedResources = computed(() =>
                             <div class="flex items-center justify-between">
                                 <span class="text-sm text-slate-600">Categories linked</span>
                                 <span class="text-sm font-semibold text-slate-900">{{ selectedCategoryCount }}</span>
+                            </div>
+                            <div class="flex items-center justify-between">
+                                <span class="text-sm text-slate-600">Public price</span>
+                                <span class="text-sm font-semibold text-slate-900">{{ form.is_free ? 'Free' : form.price || 'Pending' }}</span>
                             </div>
                             <div class="flex items-center justify-between">
                                 <span class="text-sm text-slate-600">Resources attached</span>

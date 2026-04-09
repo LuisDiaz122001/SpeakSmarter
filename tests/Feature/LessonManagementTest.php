@@ -34,6 +34,7 @@ class LessonManagementTest extends TestCase
             'name' => 'Past Perfect',
             'description' => 'Practice the past perfect.',
             'is_free' => false,
+            'price' => 49.00,
             'level_id' => Level::query()->firstOrFail()->id,
         ]);
 
@@ -48,6 +49,7 @@ class LessonManagementTest extends TestCase
             'content_uri' => 'https://example.com/reported-speech',
             'pdf_uri' => 'https://example.com/reported-speech.pdf',
             'is_free' => true,
+            'price' => '',
             'level_id' => Level::query()->firstOrFail()->id,
             'category_ids' => [$category->id],
         ];
@@ -84,6 +86,7 @@ class LessonManagementTest extends TestCase
             'content_uri' => 'https://example.com/past-perfect',
             'pdf_uri' => 'https://example.com/past-perfect.pdf',
             'is_free' => false,
+            'price' => 39.90,
             'level_id' => $level->id,
             'category_ids' => [$grammar->id, $listening->id],
         ])->assertRedirect(route('lessons.index'));
@@ -91,6 +94,7 @@ class LessonManagementTest extends TestCase
         $lesson = Lesson::query()->firstWhere('name', 'Past Perfect');
 
         $this->assertNotNull($lesson);
+        $this->assertSame('39.90', $lesson->price);
         $this->assertDatabaseHas('category_lesson', [
             'lesson_id' => $lesson->id,
             'category_id' => $grammar->id,
@@ -111,6 +115,7 @@ class LessonManagementTest extends TestCase
             'content_uri' => 'https://example.com/reported-speech',
             'pdf_uri' => 'https://example.com/reported-speech.pdf',
             'is_free' => true,
+            'price' => '',
             'level_id' => $level->id,
             'category_ids' => [$listening->id],
         ])->assertRedirect(route('lessons.index'));
@@ -119,6 +124,7 @@ class LessonManagementTest extends TestCase
 
         $this->assertSame('Reported Speech', $lesson->name);
         $this->assertTrue((bool) $lesson->is_free);
+        $this->assertNull($lesson->price);
         $this->assertDatabaseMissing('category_lesson', [
             'lesson_id' => $lesson->id,
             'category_id' => $grammar->id,

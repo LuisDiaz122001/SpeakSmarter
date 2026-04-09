@@ -30,6 +30,7 @@ const form = useForm({
     image_uri: props.lesson.image_uri ?? '',
     content_uri: props.lesson.content_uri ?? '',
     pdf_uri: props.lesson.pdf_uri ?? '',
+    price: props.lesson.price ?? '',
     is_free: props.lesson.is_free,
     level_id: props.lesson.level_id ?? '',
     category_ids: [...props.lesson.category_ids],

@@ -11,6 +11,14 @@ class Lesson extends Model
 
     protected $guarded = [];
 
+    protected function casts(): array
+    {
+        return [
+            'is_free' => 'boolean',
+            'price' => 'decimal:2',
+        ];
+    }
+
     public function categories()
     {
         return $this->belongsToMany(Category::class);

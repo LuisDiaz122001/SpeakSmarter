@@ -45,6 +45,23 @@ const accessMessage = computed(() => {
     return 'You can review the lesson library, but management actions stay restricted.';
 });
 
+const priceFormatter = new Intl.NumberFormat('en-US', {
+    style: 'currency',
+    currency: 'USD',
+});
+
+const displayPrice = (lesson) => {
+    if (lesson.is_free) {
+        return 'Free';
+    }
+
+    if (lesson.price === null) {
+        return 'On request';
+    }
+
+    return priceFormatter.format(Number(lesson.price));
+};
+
 const statCards = computed(() => [
     {
         title: 'Total Lessons',
@@ -55,6 +72,11 @@ const statCards = computed(() => [
         title: 'Free Lessons',
         value: props.overview.free,
         note: 'Open content that can be shared more easily.',
+    },
+    {
+        title: 'With Price',
+        value: props.overview.priced,
+        note: 'Paid lessons already prepared for the public catalog.',
     },
     {
         title: 'With Level',
@@ -133,7 +155,7 @@ const deleteLesson = (id) => {
                     </div>
                 </section>
 
-                <section class="grid gap-4 md:grid-cols-2 xl:grid-cols-4">
+                <section class="grid gap-4 md:grid-cols-2 xl:grid-cols-5">
                     <article
                         v-for="card in statCards"
                         :key="card.title"
@@ -191,6 +213,15 @@ const deleteLesson = (id) => {
 
                                 <span class="rounded-full bg-slate-100 px-3 py-1 text-xs font-medium text-slate-500">
                                     {{ lesson.updated_at }}
+                                </span>
+                            </div>
+
+                            <div class="mt-4 flex flex-wrap items-center gap-2">
+                                <span
+                                    class="rounded-full px-3 py-1 text-xs font-semibold uppercase tracking-[0.18em]"
+                                    :class="lesson.is_free ? 'bg-emerald-50 text-emerald-700' : 'bg-slate-900 text-white'"
+                                >
+                                    {{ displayPrice(lesson) }}
                                 </span>
                             </div>
 

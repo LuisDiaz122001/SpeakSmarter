@@ -87,6 +87,22 @@ const quickActions = computed(() => {
 
 const nextStep = computed(() => props.checklist.find((item) => !item.complete) ?? props.checklist.at(-1));
 const visiblePermissions = computed(() => permissions.value.slice(0, 8));
+const priceFormatter = new Intl.NumberFormat('en-US', {
+    style: 'currency',
+    currency: 'USD',
+});
+
+const displayPrice = (lesson) => {
+    if (lesson.is_free) {
+        return 'Free';
+    }
+
+    if (lesson.price === null) {
+        return 'On request';
+    }
+
+    return priceFormatter.format(Number(lesson.price));
+};
 </script>
 
 <template>
@@ -224,6 +240,12 @@ const visiblePermissions = computed(() => permissions.value.slice(0, 8));
                                             <div class="flex flex-wrap items-center gap-2">
                                                 <h4 class="text-base font-semibold text-slate-900">{{ lesson.name }}</h4>
                                                 <span v-if="lesson.is_free" class="rounded-full bg-emerald-100 px-2.5 py-1 text-[11px] font-semibold uppercase tracking-[0.2em] text-emerald-700">Free</span>
+                                                <span
+                                                    v-else
+                                                    class="rounded-full bg-slate-900 px-2.5 py-1 text-[11px] font-semibold uppercase tracking-[0.2em] text-white"
+                                                >
+                                                    {{ displayPrice(lesson) }}
+                                                </span>
                                             </div>
                                             <p class="mt-2 text-sm leading-7 text-slate-600">{{ lesson.description }}</p>
                                         </div>

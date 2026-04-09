@@ -5,7 +5,6 @@ namespace App\Http\Controllers;
 use App\Models\Category;
 use App\Models\Lesson;
 use App\Models\Level;
-use Illuminate\Foundation\Application;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Str;
 use Inertia\Inertia;
@@ -15,11 +14,51 @@ class DashboardController extends Controller
 {
     public function index()
     {
+        $lessonCount = Lesson::count();
+        $categoryCount = Category::count();
+        $freeLessonCount = Lesson::query()->where('is_free', true)->count();
+        $paidLessonCount = Lesson::query()->where('is_free', false)->count();
+        $startingPrice = Lesson::query()
+            ->where('is_free', false)
+            ->whereNotNull('price')
+            ->min('price');
+
         return Inertia::render('Welcome', [
             'canLogin' => Route::has('login'),
             'canRegister' => Route::has('register'),
-            'laravelVersion' => Application::VERSION,
-            'phpVersion' => PHP_VERSION,
+            'overview' => [
+                'lessons' => $lessonCount,
+                'categories' => $categoryCount,
+                'free_lessons' => $freeLessonCount,
+                'paid_lessons' => $paidLessonCount,
+                'starting_price' => $startingPrice !== null ? (float) $startingPrice : null,
+            ],
+            'featuredLessons' => Lesson::query()
+                ->with(['level:id,name', 'categories:id,name'])
+                ->latest()
+                ->take(6)
+                ->get()
+                ->map(fn (Lesson $lesson) => [
+                    'id' => $lesson->id,
+                    'name' => $lesson->name,
+                    'description' => Str::limit($lesson->description, 120),
+                    'level' => $lesson->level?->name,
+                    'categories' => $lesson->categories->pluck('name')->values()->all(),
+                    'is_free' => (bool) $lesson->is_free,
+                    'price' => $lesson->price !== null ? (float) $lesson->price : null,
+                    'updated_at' => $lesson->updated_at->diffForHumans(),
+                ]),
+            'featuredCategories' => Category::query()
+                ->withCount('lessons')
+                ->orderByDesc('lessons_count')
+                ->orderBy('name')
+                ->take(6)
+                ->get()
+                ->map(fn (Category $category) => [
+                    'id' => $category->id,
+                    'name' => $category->name,
+                    'lessons_count' => $category->lessons_count,
+                ]),
         ]);
     }
 
@@ -75,6 +114,7 @@ class DashboardController extends Controller
                     'level' => $lesson->level?->name,
                     'categories' => $lesson->categories->pluck('name')->values()->all(),
                     'is_free' => (bool) $lesson->is_free,
+                    'price' => $lesson->price !== null ? (float) $lesson->price : null,
                     'updated_at' => $lesson->updated_at->diffForHumans(),
                 ]),
             'recentCategories' => Category::query()

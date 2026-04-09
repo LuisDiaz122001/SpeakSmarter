@@ -32,6 +32,7 @@ class LessonController extends Controller
             'overview' => [
                 'total' => Lesson::count(),
                 'free' => Lesson::query()->where('is_free', true)->count(),
+                'priced' => Lesson::query()->where('is_free', false)->whereNotNull('price')->count(),
                 'with_level' => Lesson::query()->whereNotNull('level_id')->count(),
                 'categorized' => Lesson::query()->has('categories')->count(),
             ],
@@ -118,9 +119,15 @@ class LessonController extends Controller
      */
     private function lessonAttributes(array $validated): array
     {
-        return collect($validated)
+        $attributes = collect($validated)
             ->except('category_ids')
             ->all();
+
+        if (($attributes['is_free'] ?? false) === true) {
+            $attributes['price'] = null;
+        }
+
+        return $attributes;
     }
 
     /**
@@ -135,6 +142,7 @@ class LessonController extends Controller
             'image_uri' => $lesson->image_uri,
             'content_uri' => $lesson->content_uri,
             'pdf_uri' => $lesson->pdf_uri,
+            'price' => $lesson->price !== null ? (float) $lesson->price : null,
             'is_free' => (bool) $lesson->is_free,
             'updated_at' => $lesson->updated_at->diffForHumans(),
             'level_id' => $lesson->level_id,

@@ -26,6 +26,7 @@ const form = useForm({
     image_uri: '',
     content_uri: '',
     pdf_uri: '',
+    price: '',
     is_free: false,
     level_id: '',
     category_ids: [],

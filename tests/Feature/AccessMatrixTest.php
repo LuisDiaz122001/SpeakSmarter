@@ -91,6 +91,7 @@ class AccessMatrixTest extends TestCase
             'content_uri' => '',
             'pdf_uri' => '',
             'is_free' => false,
+            'price' => 22.50,
             'level_id' => Level::query()->firstOrFail()->id,
             'category_ids' => [$category->id],
         ])->assertForbidden();
@@ -111,6 +112,7 @@ class AccessMatrixTest extends TestCase
             'name' => 'Starter Lesson',
             'description' => 'A lesson used to validate the access matrix.',
             'is_free' => false,
+            'price' => 35.00,
             'level_id' => Level::query()->firstOrFail()->id,
         ]);
     }

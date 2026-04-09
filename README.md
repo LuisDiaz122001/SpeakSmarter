@@ -2,7 +2,7 @@
 
 # SpeakSmarter
 
-Plataforma web para organizar contenido educativo con lecciones, categorias y control de acceso por roles.
+Plataforma web para organizar contenido educativo con landing publica, catalogo de lecciones, precios por leccion y control de acceso por roles.
 
 [![PHP](https://img.shields.io/badge/PHP-8.2+-777BB4?logo=php&logoColor=white)](#stack)
 [![Laravel](https://img.shields.io/badge/Laravel-12-FF2D20?logo=laravel&logoColor=white)](#stack)
@@ -14,7 +14,7 @@ Plataforma web para organizar contenido educativo con lecciones, categorias y co
 
 `Laravel` `Jetstream` `Sanctum` `Spatie Permission` `Inertia` `Vue` `Tailwind`
 
-[Instalacion](#instalacion) | [Modulos](#modulos-actuales) | [Roles](#matriz-de-acceso) | [Credenciales demo](#credenciales-demo) | [Pruebas](#pruebas)
+[Instalacion](#instalacion) | [Landing publica](#landing-publica) | [Modulos](#modulos-actuales) | [Roles](#matriz-de-acceso) | [Credenciales demo](#credenciales-demo) | [Pruebas](#pruebas)
 
 </div>
 
@@ -24,6 +24,8 @@ Plataforma web para organizar contenido educativo con lecciones, categorias y co
 
 SpeakSmarter centraliza la gestion de contenido educativo en una interfaz moderna y minimalista. Hoy el proyecto ya permite:
 
+- mostrar una landing publica comercial en `/`
+- exponer un catalogo de lecciones con precios visibles
 - visualizar un dashboard con contexto operativo
 - administrar categorias
 - administrar lecciones
@@ -36,9 +38,10 @@ La app esta pensada para equipos que necesitan una base clara para crecer desde 
 
 | Area | Estado | Que resuelve |
 | --- | --- | --- |
+| Public Landing | `Activo` | Presenta la oferta, categorias y precios desde la portada |
 | Dashboard | `Activo` | Resume metricas, progreso y contenido reciente |
 | Categories | `Activo` | Organiza el mapa tematico del contenido |
-| Lessons | `Activo` | Gestiona lecciones, niveles, recursos y categorias |
+| Lessons | `Activo` | Gestiona lecciones, niveles, recursos, categorias y precio publico |
 | Roles | `Activo` | Define permisos y acceso por perfil |
 | Access Matrix | `Activo` | Separa permisos entre `admin`, `editor` y `client` |
 
@@ -55,6 +58,15 @@ La app esta pensada para equipos que necesitan una base clara para crecer desde 
 | Base de datos | MySQL o MariaDB |
 
 ## Modulos actuales
+
+### Landing publica
+
+- portada comercial en `/`
+- recorrido visual tipo catalogo
+- lecciones destacadas con precio visible
+- categorias destacadas
+- llamada a la accion hacia login o dashboard
+- misma linea visual moderna y minimalista del panel interno
 
 ### Dashboard
 
@@ -80,6 +92,7 @@ La app esta pensada para equipos que necesitan una base clara para crecer desde 
 - eliminacion
 - asignacion de nivel
 - asignacion multiple de categorias
+- precio publico por leccion
 - soporte para `image_uri`, `content_uri` y `pdf_uri`
 - bandera `is_free`
 
@@ -109,13 +122,41 @@ La app esta pensada para equipos que necesitan una base clara para crecer desde 
 
 ```mermaid
 flowchart LR
-    A[Usuario autenticado] --> B[Permisos y roles]
-    B --> C[Dashboard]
-    B --> D[Categories]
-    B --> E[Lessons]
-    B --> F[Roles]
-    F --> G[Spatie Permission]
+    A[Visitante] --> B[Landing publica]
+    B --> C[Catalogo de lecciones]
+    C --> D[Login o dashboard]
+    D --> E[Permisos y roles]
+    E --> F[Dashboard]
+    E --> G[Categories]
+    E --> H[Lessons]
+    E --> I[Roles]
+    I --> J[Spatie Permission]
 ```
+
+## Landing publica
+
+La ruta raiz `/` ya no usa la pantalla por defecto de Laravel. Ahora funciona como una pagina de inicio comercial para que un cliente pueda:
+
+- revisar la propuesta de valor
+- explorar lecciones destacadas
+- ver si una leccion es gratis o paga
+- comparar precios antes de iniciar sesion
+- recorrer categorias relevantes del catalogo
+
+La informacion mostrada en la landing se alimenta desde las lecciones reales del sistema.
+
+## Modelo comercial de lecciones
+
+Cada leccion ahora puede manejar:
+
+- `is_free` para mostrarla como gratis
+- `price` para exponer su valor publico cuando es paga
+
+Regla actual:
+
+- si `is_free` es `true`, el precio se limpia y la landing la muestra como `Gratis`
+- si `is_free` es `false`, el formulario exige un precio valido
+- si una leccion antigua no tiene precio, la landing la muestra como `Consultar precio`
 
 ## Instalacion
 
@@ -183,6 +224,12 @@ DB_PASSWORD=
 
 ```bash
 php artisan migrate:fresh --seed
+```
+
+Si ya tenias el proyecto instalado y solo quieres aplicar los cambios nuevos:
+
+```bash
+php artisan migrate
 ```
 
 8. Inicia el entorno de desarrollo.
@@ -259,19 +306,21 @@ El proyecto incluye cobertura automatizada para:
 - gestion de lecciones
 - gestion de roles
 - matriz de acceso por rol
+- landing publica y catalogo con precios
 
 Archivos clave:
 
 - `tests/Feature/AccessMatrixTest.php`
 - `tests/Feature/CategoryManagementTest.php`
 - `tests/Feature/LessonManagementTest.php`
+- `tests/Feature/PublicLandingTest.php`
 - `tests/Feature/RoleManagementTest.php`
 
 ## Rutas principales
 
 | Ruta | Descripcion |
 | --- | --- |
-| `/` | pagina publica de bienvenida |
+| `/` | landing publica con catalogo, categorias y precios |
 | `/dashboard` | panel principal autenticado |
 | `/categories` | gestion de categorias |
 | `/lessons` | gestion de lecciones |
@@ -306,14 +355,16 @@ tests/
 - [x] CRUD de lecciones
 - [x] CRUD de roles
 - [x] Matriz de acceso por permisos
+- [x] Landing publica con catalogo y precios por leccion
 - [ ] Modulo de cursos
 - [ ] Mejoras para carga de archivos
-- [ ] Vista publica o experiencia para estudiantes
+- [ ] Pagina publica de detalle por leccion
+- [ ] Flujo de compra o solicitud de acceso
 - [ ] Documentacion de despliegue
 
 ## Estado del proyecto
 
-SpeakSmarter ya tiene una base funcional para administrar contenido y accesos. El foco actual esta en consolidar la experiencia administrativa y seguir ampliando la plataforma educativa sobre una estructura ya probada.
+SpeakSmarter ya tiene una base funcional para administrar contenido y accesos, y ahora tambien cuenta con una portada publica capaz de mostrar la oferta de lecciones con precios reales. El foco actual esta en consolidar la experiencia comercial y seguir ampliando la plataforma educativa sobre una estructura ya probada.
 
 ## Autor
 
