@@ -124,4 +124,127 @@
         border: 1px solid rgba(15, 23, 42, 0.06);
         background: linear-gradient(180deg, rgba(248, 250, 252, 0.92), rgba(241, 245, 249, 0.92));
     }
+
+    .workspace-section-shell {
+        padding-top: 1.25rem;
+        padding-bottom: 1.25rem;
+    }
+
+    .workspace-section-title {
+        padding-inline: 0;
+    }
+
+    .workspace-section-title h3 {
+        font-family: "Iowan Old Style", "Palatino Linotype", "Book Antiqua", Georgia, serif;
+        font-size: 1.65rem;
+        line-height: 1.1;
+        letter-spacing: -0.03em;
+        color: #0f172a;
+    }
+
+    .workspace-section-title p {
+        margin-top: 0.85rem;
+        color: #64748b;
+        line-height: 1.8;
+    }
+
+    .workspace-section-panel {
+        border: 1px solid rgba(15, 23, 42, 0.08);
+        background: rgba(255, 255, 255, 0.86);
+        backdrop-filter: blur(16px);
+        box-shadow: 0 24px 60px rgba(15, 23, 42, 0.08);
+    }
+
+    .workspace-section-actions {
+        border-top: 1px solid rgba(15, 23, 42, 0.06);
+        background: linear-gradient(180deg, rgba(248, 250, 252, 0.88), rgba(255, 255, 255, 0.92));
+    }
+
+    .workspace-section-divider {
+        height: 1px;
+        border: 0;
+        background: linear-gradient(90deg, transparent, rgba(15, 23, 42, 0.12), transparent);
+    }
+
+    .workspace-profile-shell {
+        background:
+            radial-gradient(circle at top left, rgba(15, 118, 110, 0.14), transparent 30%),
+            radial-gradient(circle at top right, rgba(217, 119, 6, 0.12), transparent 24%),
+            linear-gradient(180deg, #f7f3ea 0%, #fcfaf5 42%, #f8f5ef 100%);
+    }
+
+    .workspace-profile-stat {
+        border: 1px solid rgba(255, 255, 255, 0.12);
+        background: rgba(255, 255, 255, 0.09);
+        backdrop-filter: blur(10px);
+    }
+
+    .workspace-profile-chip {
+        border: 1px solid rgba(15, 23, 42, 0.08);
+        background: rgba(248, 250, 252, 0.95);
+        color: #0f172a;
+    }
+
+    .workspace-account-trigger {
+        display: inline-flex;
+        align-items: center;
+        gap: 0.85rem;
+        border: 1px solid rgba(15, 23, 42, 0.08);
+        background: rgba(255, 255, 255, 0.88);
+        padding: 0.45rem 0.75rem 0.45rem 0.55rem;
+        border-radius: 9999px;
+        box-shadow: 0 10px 24px rgba(15, 23, 42, 0.06);
+        transition: border-color 180ms ease, box-shadow 180ms ease, transform 180ms ease;
+    }
+
+    .workspace-account-trigger:hover {
+        border-color: rgba(15, 118, 110, 0.2);
+        box-shadow: 0 18px 34px rgba(15, 118, 110, 0.08);
+        transform: translateY(-1px);
+    }
+
+    .workspace-account-avatar {
+        display: flex;
+        height: 2.5rem;
+        width: 2.5rem;
+        align-items: center;
+        justify-content: center;
+        overflow: hidden;
+        border-radius: 9999px;
+        background: linear-gradient(135deg, #0f172a, #0f766e);
+        color: white;
+        font-size: 0.78rem;
+        font-weight: 700;
+        letter-spacing: 0.08em;
+    }
+
+    .workspace-account-panel {
+        border: 1px solid rgba(15, 23, 42, 0.08);
+        background: rgba(255, 255, 255, 0.96);
+        backdrop-filter: blur(18px);
+        box-shadow: 0 30px 70px rgba(15, 23, 42, 0.14);
+    }
+
+    .workspace-account-link {
+        display: block;
+        border-radius: 1rem;
+        padding: 0.8rem 0.95rem;
+        transition: background 180ms ease, transform 180ms ease, color 180ms ease;
+    }
+
+    .workspace-account-link:hover {
+        background: rgba(241, 245, 249, 0.88);
+        transform: translateY(-1px);
+    }
+
+    .workspace-modal-surface {
+        border: 1px solid rgba(15, 23, 42, 0.08);
+        background: rgba(255, 255, 255, 0.98);
+        box-shadow: 0 32px 80px rgba(15, 23, 42, 0.16);
+    }
+
+    .workspace-modal-footer {
+        border-top: 1px solid rgba(15, 23, 42, 0.06);
+        background: linear-gradient(180deg, rgba(248, 250, 252, 0.88), rgba(255, 255, 255, 0.94));
+    }
 }

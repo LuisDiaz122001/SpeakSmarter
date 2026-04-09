@@ -30,17 +30,17 @@ const close = () => {
         :closeable="closeable"
         @close="close"
     >
-        <div class="px-6 py-4">
-            <div class="text-lg font-medium text-gray-900">
+        <div class="px-6 py-5">
+            <div class="workspace-display text-2xl text-slate-900">
                 <slot name="title" />
             </div>
 
-            <div class="mt-4 text-sm text-gray-600">
+            <div class="mt-4 text-sm leading-7 text-slate-600">
                 <slot name="content" />
             </div>
         </div>
 
-        <div class="flex flex-row justify-end px-6 py-4 bg-gray-100 text-end">
+        <div class="workspace-modal-footer flex flex-row justify-end px-6 py-4 text-end">
             <slot name="footer" />
         </div>
     </Modal>

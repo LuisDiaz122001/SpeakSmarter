@@ -18,7 +18,9 @@ class UpdateUserProfileInformation implements UpdatesUserProfileInformation
     public function update(User $user, array $input): void
     {
         Validator::make($input, [
-            'name' => ['required', 'string', 'max:255'],
+            'first_name' => ['required', 'string', 'max:100'],
+            'last_name' => ['required', 'string', 'max:100'],
+            'phone' => ['nullable', 'string', 'max:30'],
             'email' => ['required', 'email', 'max:255', Rule::unique('users')->ignore($user->id)],
             'photo' => ['nullable', 'mimes:jpg,jpeg,png', 'max:1024'],
         ])->validateWithBag('updateProfileInformation');
@@ -27,12 +29,21 @@ class UpdateUserProfileInformation implements UpdatesUserProfileInformation
             $user->updateProfilePhoto($input['photo']);
         }
 
+        $fullName = User::fullNameFromParts($input['first_name'], $input['last_name']);
+        $nameParts = [
+            'first_name' => $input['first_name'],
+            'last_name' => $input['last_name'],
+        ];
+
         if ($input['email'] !== $user->email &&
             $user instanceof MustVerifyEmail) {
-            $this->updateVerifiedUser($user, $input);
+            $this->updateVerifiedUser($user, $input, $nameParts, $fullName);
         } else {
             $user->forceFill([
-                'name' => $input['name'],
+                'name' => $fullName,
+                'first_name' => $nameParts['first_name'],
+                'last_name' => $nameParts['last_name'],
+                'phone' => $input['phone'] ?? null,
                 'email' => $input['email'],
             ])->save();
         }
@@ -41,12 +52,16 @@ class UpdateUserProfileInformation implements UpdatesUserProfileInformation
     /**
      * Update the given verified user's profile information.
      *
-     * @param  array<string, string>  $input
+     * @param  array<string, mixed>  $input
+     * @param  array{first_name: string, last_name: string|null}  $nameParts
      */
-    protected function updateVerifiedUser(User $user, array $input): void
+    protected function updateVerifiedUser(User $user, array $input, array $nameParts, string $fullName): void
     {
         $user->forceFill([
-            'name' => $input['name'],
+            'name' => $fullName,
+            'first_name' => $nameParts['first_name'],
+            'last_name' => $nameParts['last_name'],
+            'phone' => $input['phone'] ?? null,
             'email' => $input['email'],
             'email_verified_at' => null,
         ])->save();

@@ -4,6 +4,7 @@ use App\Http\Controllers\CategoryController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\LessonController;
 use App\Http\Controllers\RoleController;
+use App\Http\Controllers\UserController;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/', [DashboardController::class, 'index']);
@@ -70,4 +71,23 @@ Route::middleware([
     Route::delete('/roles/{role}', [RoleController::class, 'destroy'])
         ->middleware('can:delete roles')
         ->name('roles.destroy');
+
+    Route::get('/users', [UserController::class, 'index'])
+        ->middleware('can:read users')
+        ->name('users.index');
+    Route::get('/users/create', [UserController::class, 'create'])
+        ->middleware('can:create users')
+        ->name('users.create');
+    Route::post('/users', [UserController::class, 'store'])
+        ->middleware('can:create users')
+        ->name('users.store');
+    Route::get('/users/{user}/edit', [UserController::class, 'edit'])
+        ->middleware('can:edit users')
+        ->name('users.edit');
+    Route::put('/users/{user}', [UserController::class, 'update'])
+        ->middleware('can:update users')
+        ->name('users.update');
+    Route::delete('/users/{user}', [UserController::class, 'destroy'])
+        ->middleware('can:delete users')
+        ->name('users.destroy');
 });

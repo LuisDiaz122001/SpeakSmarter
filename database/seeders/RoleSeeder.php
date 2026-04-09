@@ -44,6 +44,12 @@ class RoleSeeder extends Seeder
         $permissions_delete_category = Permission::firstOrCreate(['name' => 'delete categories', 'guard_name' => 'web']);
         $permissions_update_category = Permission::firstOrCreate(['name' => 'update categories', 'guard_name' => 'web']);
 
+        $permissions_create_user = Permission::firstOrCreate(['name' => 'create users', 'guard_name' => 'web']);
+        $permissions_read_user = Permission::firstOrCreate(['name' => 'read users', 'guard_name' => 'web']);
+        $permissions_edit_user = Permission::firstOrCreate(['name' => 'edit users', 'guard_name' => 'web']);
+        $permissions_delete_user = Permission::firstOrCreate(['name' => 'delete users', 'guard_name' => 'web']);
+        $permissions_update_user = Permission::firstOrCreate(['name' => 'update users', 'guard_name' => 'web']);
+
         $permissions_admin = [
             $permissions_create_role,
             $permissions_read_role,
@@ -60,6 +66,11 @@ class RoleSeeder extends Seeder
             $permissions_edit_category,
             $permissions_delete_category,
             $permissions_update_category,
+            $permissions_create_user,
+            $permissions_read_user,
+            $permissions_edit_user,
+            $permissions_delete_user,
+            $permissions_update_user,
         ];
 
         $permissions_editor = [

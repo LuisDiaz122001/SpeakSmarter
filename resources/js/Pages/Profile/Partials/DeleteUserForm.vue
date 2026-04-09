@@ -40,40 +40,39 @@ const closeModal = () => {
 <template>
     <ActionSection>
         <template #title>
-            Delete Account
+            Zona delicada
         </template>
 
         <template #description>
-            Permanently delete your account.
+            Elimina la cuenta solo si de verdad ya no la vas a usar.
         </template>
 
         <template #content>
-            <div class="max-w-xl text-sm text-gray-600">
-                Once your account is deleted, all of its resources and data will be permanently deleted. Before deleting your account, please download any data or information that you wish to retain.
+            <div class="max-w-2xl rounded-[1.25rem] border border-red-100 bg-red-50/70 px-5 py-5 text-sm leading-7 text-red-900">
+                Al eliminar tu cuenta se borraran de forma permanente tus datos, sesiones y accesos asociados. Antes de continuar, asegurate de conservar cualquier informacion que quieras guardar.
             </div>
 
             <div class="mt-5">
-                <DangerButton @click="confirmUserDeletion">
-                    Delete Account
+                <DangerButton class="rounded-full px-5 py-3" @click="confirmUserDeletion">
+                    Eliminar cuenta
                 </DangerButton>
             </div>
 
-            <!-- Delete Account Confirmation Modal -->
             <DialogModal :show="confirmingUserDeletion" @close="closeModal">
                 <template #title>
-                    Delete Account
+                    Confirmar eliminacion
                 </template>
 
                 <template #content>
-                    Are you sure you want to delete your account? Once your account is deleted, all of its resources and data will be permanently deleted. Please enter your password to confirm you would like to permanently delete your account.
+                    Esta accion no se puede deshacer. Escribe tu contrasena actual para confirmar que quieres eliminar esta cuenta de forma permanente.
 
                     <div class="mt-4">
                         <TextInput
                             ref="passwordInput"
                             v-model="form.password"
                             type="password"
-                            class="mt-1 block w-3/4"
-                            placeholder="Password"
+                            class="workspace-input mt-1 block w-full rounded-2xl px-4 py-3 sm:w-3/4"
+                            placeholder="Contrasena"
                             autocomplete="current-password"
                             @keyup.enter="deleteUser"
                         />
@@ -83,17 +82,17 @@ const closeModal = () => {
                 </template>
 
                 <template #footer>
-                    <SecondaryButton @click="closeModal">
-                        Cancel
+                    <SecondaryButton class="rounded-full px-4 py-2" @click="closeModal">
+                        Cancelar
                     </SecondaryButton>
 
                     <DangerButton
-                        class="ms-3"
+                        class="ms-3 rounded-full px-4 py-2"
                         :class="{ 'opacity-25': form.processing }"
                         :disabled="form.processing"
                         @click="deleteUser"
                     >
-                        Delete Account
+                        Eliminar cuenta
                     </DangerButton>
                 </template>
             </DialogModal>

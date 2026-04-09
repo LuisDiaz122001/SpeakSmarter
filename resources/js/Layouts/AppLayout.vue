@@ -1,6 +1,6 @@
 <script setup>
-import { ref } from 'vue';
-import { Head, Link, router } from '@inertiajs/vue3';
+import { computed, ref } from 'vue';
+import { Head, Link, router, usePage } from '@inertiajs/vue3';
 import ApplicationMark from '@/Components/ApplicationMark.vue';
 import Banner from '@/Components/Banner.vue';
 import Dropdown from '@/Components/Dropdown.vue';
@@ -12,7 +12,28 @@ defineProps({
     title: String,
 });
 
+const page = usePage();
 const showingNavigationDropdown = ref(false);
+
+const currentRoles = computed(() => page.props.user?.roles ?? []);
+const primaryRoleLabel = computed(() => {
+    const labels = {
+        admin: 'Administrador',
+        editor: 'Editor',
+        client: 'Cliente',
+    };
+
+    return labels[currentRoles.value[0]] ?? 'Cuenta activa';
+});
+
+const userInitials = computed(() => {
+    const parts = String(page.props.auth.user.name ?? '')
+        .split(' ')
+        .filter(Boolean)
+        .slice(0, 2);
+
+    return parts.map((part) => part[0]).join('').toUpperCase() || 'SS';
+});
 
 const switchToTeam = (team) => {
     router.put(route('current-team.update'), {
@@ -67,6 +88,11 @@ const logout = () => {
                                     Roles
                                 </NavLink>
                             </div>
+                            <div class="hidden space-x-8 sm:-my-px sm:ms-10 sm:flex" v-if="$page.props.user.permissions.some(p => p.trim() === 'read users')">
+                                <NavLink :href="route('users.index')" :active="route().current('users.*')">
+                                    Usuarios
+                                </NavLink>
+                            </div>
                         </div>
 
                         <div class="hidden sm:flex sm:items-center sm:ms-6">
@@ -89,16 +115,16 @@ const logout = () => {
                                         <div class="w-60">
                                             <!-- Team Management -->
                                             <div class="block px-4 py-2 text-xs text-gray-400">
-                                                Manage Team
+                                                Gestionar equipo
                                             </div>
 
                                             <!-- Team Settings -->
                                             <DropdownLink :href="route('teams.show', $page.props.auth.user.current_team)">
-                                                Team Settings
+                                                Ajustes del equipo
                                             </DropdownLink>
 
                                             <DropdownLink v-if="$page.props.jetstream.canCreateTeams" :href="route('teams.create')">
-                                                Create New Team
+                                                Crear equipo
                                             </DropdownLink>
 
                                             <!-- Team Switcher -->
@@ -106,7 +132,7 @@ const logout = () => {
                                                 <div class="border-t border-gray-200" />
 
                                                 <div class="block px-4 py-2 text-xs text-gray-400">
-                                                    Switch Teams
+                                                    Cambiar equipo
                                                 </div>
 
                                                 <template v-for="team in $page.props.auth.user.all_teams" :key="team.id">
@@ -130,44 +156,68 @@ const logout = () => {
 
                             <!-- Settings Dropdown -->
                             <div class="ms-3 relative">
-                                <Dropdown align="right" width="48">
+                                <Dropdown align="right" width="72" :content-classes="['workspace-account-panel', 'p-2']">
                                     <template #trigger>
-                                        <button v-if="$page.props.jetstream.managesProfilePhotos" class="flex text-sm border-2 border-transparent rounded-full focus:outline-none focus:border-gray-300 transition">
-                                            <img class="size-8 rounded-full object-cover" :src="$page.props.auth.user.profile_photo_url" :alt="$page.props.auth.user.name">
+                                        <button type="button" class="workspace-account-trigger focus:outline-none focus:ring-2 focus:ring-teal-500/30">
+                                            <span class="workspace-account-avatar">
+                                                <img
+                                                    v-if="$page.props.jetstream.managesProfilePhotos"
+                                                    class="h-full w-full object-cover"
+                                                    :src="$page.props.auth.user.profile_photo_url"
+                                                    :alt="$page.props.auth.user.name"
+                                                >
+                                                <span v-else>{{ userInitials }}</span>
+                                            </span>
+
+                                            <span class="hidden min-w-0 text-start lg:block">
+                                                <span class="block truncate text-sm font-semibold text-slate-900">{{ $page.props.auth.user.name }}</span>
+                                                <span class="block text-xs uppercase tracking-[0.18em] text-slate-500">{{ primaryRoleLabel }}</span>
+                                            </span>
+
+                                            <svg class="size-4 text-slate-400" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
+                                                <path stroke-linecap="round" stroke-linejoin="round" d="M19.5 8.25l-7.5 7.5-7.5-7.5" />
+                                            </svg>
                                         </button>
-
-                                        <span v-else class="inline-flex rounded-md">
-                                            <button type="button" class="inline-flex items-center px-3 py-2 border border-transparent text-sm leading-4 font-medium rounded-md text-gray-500 bg-white hover:text-gray-700 focus:outline-none focus:bg-gray-50 active:bg-gray-50 transition ease-in-out duration-150">
-                                                {{ $page.props.auth.user.name }}
-
-                                                <svg class="ms-2 -me-0.5 size-4" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
-                                                    <path stroke-linecap="round" stroke-linejoin="round" d="M19.5 8.25l-7.5 7.5-7.5-7.5" />
-                                                </svg>
-                                            </button>
-                                        </span>
                                     </template>
 
                                     <template #content>
-                                        <!-- Account Management -->
-                                        <div class="block px-4 py-2 text-xs text-gray-400">
-                                            Manage Account
+                                        <div class="rounded-[1.1rem] bg-slate-50 px-4 py-4">
+                                            <p class="text-xs uppercase tracking-[0.26em] text-slate-400">Cuenta</p>
+                                            <p class="mt-2 text-sm font-semibold text-slate-900">{{ $page.props.auth.user.name }}</p>
+                                            <p class="mt-1 text-sm text-slate-600">{{ $page.props.auth.user.email }}</p>
+                                            <div class="mt-3 flex flex-wrap gap-2">
+                                                <span
+                                                    v-for="role in currentRoles"
+                                                    :key="role"
+                                                    class="rounded-full bg-white px-3 py-1 text-[11px] font-semibold uppercase tracking-[0.18em] text-slate-600"
+                                                >
+                                                    {{ role === 'admin' ? 'Administrador' : role === 'editor' ? 'Editor' : role === 'client' ? 'Cliente' : role }}
+                                                </span>
+                                                <span v-if="!currentRoles.length" class="rounded-full bg-white px-3 py-1 text-[11px] font-semibold uppercase tracking-[0.18em] text-slate-500">
+                                                    Sin rol
+                                                </span>
+                                            </div>
                                         </div>
 
-                                        <DropdownLink :href="route('profile.show')">
-                                            Profile
-                                        </DropdownLink>
+                                        <div class="mt-2 space-y-1">
+                                            <Link :href="route('profile.show')" class="workspace-account-link">
+                                                <p class="text-sm font-semibold text-slate-900">Perfil</p>
+                                                <p class="mt-1 text-xs leading-5 text-slate-500">Actualiza tus datos, seguridad y configuracion personal.</p>
+                                            </Link>
 
-                                        <DropdownLink v-if="$page.props.jetstream.hasApiFeatures" :href="route('api-tokens.index')">
-                                            API Tokens
-                                        </DropdownLink>
+                                            <Link v-if="$page.props.jetstream.hasApiFeatures" :href="route('api-tokens.index')" class="workspace-account-link">
+                                                <p class="text-sm font-semibold text-slate-900">Tokens API</p>
+                                                <p class="mt-1 text-xs leading-5 text-slate-500">Gestiona accesos de integracion para tus conexiones externas.</p>
+                                            </Link>
+                                        </div>
 
-                                        <div class="border-t border-gray-200" />
+                                        <div class="my-2 border-t border-slate-200" />
 
-                                        <!-- Authentication -->
                                         <form @submit.prevent="logout">
-                                            <DropdownLink as="button">
-                                                Log Out
-                                            </DropdownLink>
+                                            <button type="submit" class="workspace-account-link w-full text-start">
+                                                <p class="text-sm font-semibold text-red-700">Cerrar sesion</p>
+                                                <p class="mt-1 text-xs leading-5 text-slate-500">Salir de la cuenta actual en este dispositivo.</p>
+                                            </button>
                                         </form>
                                     </template>
                                 </Dropdown>
@@ -229,6 +279,12 @@ const logout = () => {
                         </ResponsiveNavLink>
                     </div>
 
+                    <div class="pt-2 pb-3 space-y-1" v-if="$page.props.user.permissions.some(p => p.trim() === 'read users')">
+                        <ResponsiveNavLink :href="route('users.index')" :active="route().current('users.*')">
+                            Usuarios
+                        </ResponsiveNavLink>
+                    </div>
+
                     <!-- Responsive Settings Options -->
                     <div class="pt-4 pb-1 border-t border-gray-200">
                         <div class="flex items-center px-4">
@@ -248,17 +304,17 @@ const logout = () => {
 
                         <div class="mt-3 space-y-1">
                             <ResponsiveNavLink :href="route('profile.show')" :active="route().current('profile.show')">
-                                Profile
+                                Perfil
                             </ResponsiveNavLink>
 
                             <ResponsiveNavLink v-if="$page.props.jetstream.hasApiFeatures" :href="route('api-tokens.index')" :active="route().current('api-tokens.index')">
-                                API Tokens
+                                Tokens API
                             </ResponsiveNavLink>
 
                             <!-- Authentication -->
                             <form method="POST" @submit.prevent="logout">
                                 <ResponsiveNavLink as="button">
-                                    Log Out
+                                    Cerrar sesion
                                 </ResponsiveNavLink>
                             </form>
 
@@ -267,16 +323,16 @@ const logout = () => {
                                 <div class="border-t border-gray-200" />
 
                                 <div class="block px-4 py-2 text-xs text-gray-400">
-                                    Manage Team
+                                    Gestionar equipo
                                 </div>
 
                                 <!-- Team Settings -->
                                 <ResponsiveNavLink :href="route('teams.show', $page.props.auth.user.current_team)" :active="route().current('teams.show')">
-                                    Team Settings
+                                    Ajustes del equipo
                                 </ResponsiveNavLink>
 
                                 <ResponsiveNavLink v-if="$page.props.jetstream.canCreateTeams" :href="route('teams.create')" :active="route().current('teams.create')">
-                                    Create New Team
+                                    Crear equipo
                                 </ResponsiveNavLink>
 
                                 <!-- Team Switcher -->
@@ -284,7 +340,7 @@ const logout = () => {
                                     <div class="border-t border-gray-200" />
 
                                     <div class="block px-4 py-2 text-xs text-gray-400">
-                                        Switch Teams
+                                        Cambiar equipo
                                     </div>
 
                                     <template v-for="team in $page.props.auth.user.all_teams" :key="team.id">

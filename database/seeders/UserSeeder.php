@@ -16,7 +16,10 @@ class UserSeeder extends Seeder
         $admin = User::updateOrCreate([
             'email' => 'admin@speaksmarter.com',
         ], [
-            'name' => 'Admin',
+            'name' => 'Admin Demo',
+            'first_name' => 'Admin',
+            'last_name' => 'Demo',
+            'phone' => '3000001001',
             'password' => Hash::make('admin1234'),
         ]);
         $admin->syncRoles(['admin']);
@@ -24,7 +27,10 @@ class UserSeeder extends Seeder
         $editor = User::updateOrCreate([
             'email' => 'editor@speaksmarter.com',
         ], [
-            'name' => 'Editor',
+            'name' => 'Editor Demo',
+            'first_name' => 'Editor',
+            'last_name' => 'Demo',
+            'phone' => '3000001002',
             'password' => Hash::make('editor1234'),
         ]);
         $editor->syncRoles(['editor']);
@@ -32,7 +38,10 @@ class UserSeeder extends Seeder
         $client = User::updateOrCreate([
             'email' => 'client@speaksmarter.com',
         ], [
-            'name' => 'Client',
+            'name' => 'Cliente Demo',
+            'first_name' => 'Cliente',
+            'last_name' => 'Demo',
+            'phone' => '3000001003',
             'password' => Hash::make('client1234'),
         ]);
         $client->syncRoles(['client']);

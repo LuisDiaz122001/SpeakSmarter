@@ -31,6 +31,9 @@ class User extends Authenticatable
      */
     protected $fillable = [
         'name',
+        'first_name',
+        'last_name',
+        'phone',
         'email',
         'password',
     ];
@@ -67,5 +70,33 @@ class User extends Authenticatable
             'email_verified_at' => 'datetime',
             'password' => 'hashed',
         ];
+    }
+
+    /**
+     * @return array{first_name: string, last_name: string|null}
+     */
+    public static function splitName(?string $name): array
+    {
+        $parts = preg_split('/\s+/', trim((string) $name), -1, PREG_SPLIT_NO_EMPTY) ?: [];
+
+        if ($parts === []) {
+            return [
+                'first_name' => '',
+                'last_name' => null,
+            ];
+        }
+
+        $firstName = array_shift($parts);
+        $lastName = $parts !== [] ? implode(' ', $parts) : null;
+
+        return [
+            'first_name' => $firstName,
+            'last_name' => $lastName,
+        ];
+    }
+
+    public static function fullNameFromParts(?string $firstName, ?string $lastName): string
+    {
+        return trim(collect([$firstName, $lastName])->filter()->implode(' '));
     }
 }

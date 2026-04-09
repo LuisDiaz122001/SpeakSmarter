@@ -13,9 +13,15 @@ const props = defineProps({
     user: Object,
 });
 
+const nameParts = String(props.user.name ?? '').split(' ').filter(Boolean);
+const fallbackFirstName = props.user.first_name ?? nameParts[0] ?? '';
+const fallbackLastName = props.user.last_name ?? nameParts.slice(1).join(' ');
+
 const form = useForm({
     _method: 'PUT',
-    name: props.user.name,
+    first_name: fallbackFirstName,
+    last_name: fallbackLastName,
+    phone: props.user.phone ?? '',
     email: props.user.email,
     photo: null,
 });
@@ -28,6 +34,11 @@ const updateProfileInformation = () => {
     if (photoInput.value) {
         form.photo = photoInput.value.files[0];
     }
+
+    form.transform((data) => ({
+        ...data,
+        name: `${data.first_name} ${data.last_name}`.trim(),
+    }));
 
     form.post(route('user-profile-information.update'), {
         errorBag: 'updateProfileInformation',
@@ -78,17 +89,15 @@ const clearPhotoFileInput = () => {
 <template>
     <FormSection @submitted="updateProfileInformation">
         <template #title>
-            Profile Information
+            Identidad y contacto
         </template>
 
         <template #description>
-            Update your account's profile information and email address.
+            Actualiza la informacion principal de tu cuenta y manten visible la forma correcta de contactarte.
         </template>
 
         <template #form>
-            <!-- Profile Photo -->
             <div v-if="$page.props.jetstream.managesProfilePhotos" class="col-span-6 sm:col-span-4">
-                <!-- Profile Photo File Input -->
                 <input
                     id="photo"
                     ref="photoInput"
@@ -97,93 +106,128 @@ const clearPhotoFileInput = () => {
                     @change="updatePhotoPreview"
                 >
 
-                <InputLabel for="photo" value="Photo" />
+                <InputLabel for="photo" value="Foto de perfil" />
 
-                <!-- Current Profile Photo -->
-                <div v-show="! photoPreview" class="mt-2">
-                    <img :src="user.profile_photo_url" :alt="user.name" class="rounded-full size-20 object-cover">
+                <div class="mt-3 flex items-center gap-4 rounded-[1.25rem] border border-slate-200 bg-slate-50/80 px-4 py-4">
+                    <div v-show="! photoPreview" class="shrink-0">
+                        <img :src="user.profile_photo_url" :alt="user.name" class="rounded-full size-20 object-cover ring-4 ring-white shadow-md">
+                    </div>
+
+                    <div v-show="photoPreview" class="shrink-0">
+                        <span
+                            class="block rounded-full size-20 bg-cover bg-no-repeat bg-center ring-4 ring-white shadow-md"
+                            :style="'background-image: url(\'' + photoPreview + '\');'"
+                        />
+                    </div>
+
+                    <div class="min-w-0 flex-1">
+                        <p class="text-sm font-semibold text-slate-900">Imagen visible en tu cuenta</p>
+                        <p class="mt-1 text-sm leading-6 text-slate-500">
+                            Usa una foto limpia y cercana para que tu perfil se vea mas personal y reconocible.
+                        </p>
+                    </div>
                 </div>
 
-                <!-- New Profile Photo Preview -->
-                <div v-show="photoPreview" class="mt-2">
-                    <span
-                        class="block rounded-full size-20 bg-cover bg-no-repeat bg-center"
-                        :style="'background-image: url(\'' + photoPreview + '\');'"
-                    />
+                <div class="mt-4 flex flex-wrap gap-3">
+                    <SecondaryButton class="rounded-full border-slate-200 px-4 py-2 text-slate-700" type="button" @click.prevent="selectNewPhoto">
+                        Cambiar foto
+                    </SecondaryButton>
+
+                    <SecondaryButton
+                        v-if="user.profile_photo_path"
+                        type="button"
+                        class="rounded-full border-slate-200 px-4 py-2 text-slate-700"
+                        @click.prevent="deletePhoto"
+                    >
+                        Quitar foto
+                    </SecondaryButton>
                 </div>
-
-                <SecondaryButton class="mt-2 me-2" type="button" @click.prevent="selectNewPhoto">
-                    Select A New Photo
-                </SecondaryButton>
-
-                <SecondaryButton
-                    v-if="user.profile_photo_path"
-                    type="button"
-                    class="mt-2"
-                    @click.prevent="deletePhoto"
-                >
-                    Remove Photo
-                </SecondaryButton>
 
                 <InputError :message="form.errors.photo" class="mt-2" />
             </div>
 
-            <!-- Name -->
-            <div class="col-span-6 sm:col-span-4">
-                <InputLabel for="name" value="Name" />
+            <div class="col-span-6 sm:col-span-3">
+                <InputLabel for="first_name" value="Nombre" />
                 <TextInput
-                    id="name"
-                    v-model="form.name"
+                    id="first_name"
+                    v-model="form.first_name"
                     type="text"
-                    class="mt-1 block w-full"
+                    class="workspace-input mt-2 block w-full rounded-2xl px-4 py-3"
                     required
-                    autocomplete="name"
+                    autocomplete="given-name"
                 />
-                <InputError :message="form.errors.name" class="mt-2" />
+                <InputError :message="form.errors.first_name" class="mt-2" />
             </div>
 
-            <!-- Email -->
-            <div class="col-span-6 sm:col-span-4">
-                <InputLabel for="email" value="Email" />
+            <div class="col-span-6 sm:col-span-3">
+                <InputLabel for="last_name" value="Apellido" />
+                <TextInput
+                    id="last_name"
+                    v-model="form.last_name"
+                    type="text"
+                    class="workspace-input mt-2 block w-full rounded-2xl px-4 py-3"
+                    required
+                    autocomplete="family-name"
+                />
+                <InputError :message="form.errors.last_name" class="mt-2" />
+            </div>
+
+            <div class="col-span-6 sm:col-span-3">
+                <InputLabel for="phone" value="Telefono" />
+                <TextInput
+                    id="phone"
+                    v-model="form.phone"
+                    type="tel"
+                    class="workspace-input mt-2 block w-full rounded-2xl px-4 py-3"
+                    autocomplete="tel"
+                />
+                <p class="mt-3 text-sm leading-6 text-slate-500">
+                    Opcional, pero util si usas la plataforma con soporte humano o seguimiento comercial.
+                </p>
+                <InputError :message="form.errors.phone" class="mt-2" />
+            </div>
+
+            <div class="col-span-6 sm:col-span-3">
+                <InputLabel for="email" value="Correo" />
                 <TextInput
                     id="email"
                     v-model="form.email"
                     type="email"
-                    class="mt-1 block w-full"
+                    class="workspace-input mt-2 block w-full rounded-2xl px-4 py-3"
                     required
                     autocomplete="username"
                 />
                 <InputError :message="form.errors.email" class="mt-2" />
 
                 <div v-if="$page.props.jetstream.hasEmailVerification && user.email_verified_at === null">
-                    <p class="text-sm mt-2">
-                        Your email address is unverified.
+                    <p class="mt-3 text-sm leading-6 text-slate-500">
+                        Tu correo aun no esta verificado.
 
                         <Link
                             :href="route('verification.send')"
                             method="post"
                             as="button"
-                            class="underline text-sm text-gray-600 hover:text-gray-900 rounded-md focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
+                            class="font-semibold text-teal-700 underline underline-offset-4 hover:text-teal-800 focus:outline-none"
                             @click.prevent="sendEmailVerification"
                         >
-                            Click here to re-send the verification email.
+                            Reenviar correo de verificacion
                         </Link>
                     </p>
 
-                    <div v-show="verificationLinkSent" class="mt-2 font-medium text-sm text-green-600">
-                        A new verification link has been sent to your email address.
+                    <div v-show="verificationLinkSent" class="mt-2 font-medium text-sm text-emerald-600">
+                        Te enviamos un nuevo enlace de verificacion.
                     </div>
                 </div>
             </div>
         </template>
 
         <template #actions>
-            <ActionMessage :on="form.recentlySuccessful" class="me-3">
-                Saved.
+            <ActionMessage :on="form.recentlySuccessful" class="me-3 text-sm text-emerald-600">
+                Cambios guardados.
             </ActionMessage>
 
-            <PrimaryButton :class="{ 'opacity-25': form.processing }" :disabled="form.processing">
-                Save
+            <PrimaryButton class="rounded-full bg-slate-900 px-5 py-3 text-white hover:bg-slate-800 focus:ring-teal-500" :class="{ 'opacity-25': form.processing }" :disabled="form.processing">
+                Guardar perfil
             </PrimaryButton>
         </template>
     </FormSection>

@@ -37,13 +37,15 @@ class AccessMatrixTest extends TestCase
             ->assertInertia(fn (Assert $page) => $page
                 ->component('Categories/Index')
                 ->where('user.roles.0', 'admin')
-                ->has('user.permissions', 15));
+                ->has('user.permissions', 20));
 
         $this->get(route('lessons.index'))->assertOk();
         $this->get(route('roles.index'))->assertOk();
+        $this->get(route('users.index'))->assertOk();
         $this->get(route('categories.create'))->assertOk();
         $this->get(route('lessons.create'))->assertOk();
         $this->get(route('roles.create'))->assertOk();
+        $this->get(route('users.create'))->assertOk();
     }
 
     public function test_editor_can_manage_content_but_cannot_access_roles_or_delete_lessons(): void
@@ -62,6 +64,8 @@ class AccessMatrixTest extends TestCase
         $this->get(route('lessons.index'))->assertOk();
         $this->getJson(route('roles.index'))->assertForbidden();
         $this->getJson(route('roles.create'))->assertForbidden();
+        $this->getJson(route('users.index'))->assertForbidden();
+        $this->getJson(route('users.create'))->assertForbidden();
         $this->deleteJson(route('lessons.destroy', $lesson))->assertForbidden();
     }
 
@@ -96,6 +100,7 @@ class AccessMatrixTest extends TestCase
             'category_ids' => [$category->id],
         ])->assertForbidden();
         $this->getJson(route('roles.index'))->assertForbidden();
+        $this->getJson(route('users.index'))->assertForbidden();
     }
 
     private function createUserWithRole(string $role): User

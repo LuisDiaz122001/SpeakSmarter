@@ -26,8 +26,13 @@ class CreateNewUser implements CreatesNewUsers
             'terms' => Jetstream::hasTermsAndPrivacyPolicyFeature() ? ['accepted', 'required'] : '',
         ])->validate();
 
+        $nameParts = User::splitName($input['name']);
+
         return User::create([
             'name' => $input['name'],
+            'first_name' => $nameParts['first_name'],
+            'last_name' => $nameParts['last_name'],
+            'phone' => null,
             'email' => $input['email'],
             'password' => Hash::make($input['password']),
         ]);

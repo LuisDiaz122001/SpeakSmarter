@@ -40,47 +40,50 @@ const updatePassword = () => {
 <template>
     <FormSection @submitted="updatePassword">
         <template #title>
-            Update Password
+            Contrasena y acceso
         </template>
 
         <template #description>
-            Ensure your account is using a long, random password to stay secure.
+            Refuerza la seguridad de tu cuenta con una contrasena nueva, clara y resistente.
         </template>
 
         <template #form>
             <div class="col-span-6 sm:col-span-4">
-                <InputLabel for="current_password" value="Current Password" />
+                <InputLabel for="current_password" value="Contrasena actual" />
                 <TextInput
                     id="current_password"
                     ref="currentPasswordInput"
                     v-model="form.current_password"
                     type="password"
-                    class="mt-1 block w-full"
+                    class="workspace-input mt-2 block w-full rounded-2xl px-4 py-3"
                     autocomplete="current-password"
                 />
                 <InputError :message="form.errors.current_password" class="mt-2" />
             </div>
 
             <div class="col-span-6 sm:col-span-4">
-                <InputLabel for="password" value="New Password" />
+                <InputLabel for="password" value="Nueva contrasena" />
                 <TextInput
                     id="password"
                     ref="passwordInput"
                     v-model="form.password"
                     type="password"
-                    class="mt-1 block w-full"
+                    class="workspace-input mt-2 block w-full rounded-2xl px-4 py-3"
                     autocomplete="new-password"
                 />
+                <p class="mt-3 text-sm leading-6 text-slate-500">
+                    Procura mezclar palabras faciles de recordar para ti con longitud suficiente para mantener la cuenta segura.
+                </p>
                 <InputError :message="form.errors.password" class="mt-2" />
             </div>
 
             <div class="col-span-6 sm:col-span-4">
-                <InputLabel for="password_confirmation" value="Confirm Password" />
+                <InputLabel for="password_confirmation" value="Confirmar contrasena" />
                 <TextInput
                     id="password_confirmation"
                     v-model="form.password_confirmation"
                     type="password"
-                    class="mt-1 block w-full"
+                    class="workspace-input mt-2 block w-full rounded-2xl px-4 py-3"
                     autocomplete="new-password"
                 />
                 <InputError :message="form.errors.password_confirmation" class="mt-2" />
@@ -88,12 +91,12 @@ const updatePassword = () => {
         </template>
 
         <template #actions>
-            <ActionMessage :on="form.recentlySuccessful" class="me-3">
-                Saved.
+            <ActionMessage :on="form.recentlySuccessful" class="me-3 text-sm text-emerald-600">
+                Contrasena actualizada.
             </ActionMessage>
 
-            <PrimaryButton :class="{ 'opacity-25': form.processing }" :disabled="form.processing">
-                Save
+            <PrimaryButton class="rounded-full bg-slate-900 px-5 py-3 text-white hover:bg-slate-800 focus:ring-teal-500" :class="{ 'opacity-25': form.processing }" :disabled="form.processing">
+                Guardar contrasena
             </PrimaryButton>
         </template>
     </FormSection>
