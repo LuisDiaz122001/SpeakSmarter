@@ -248,3 +248,58 @@
         background: linear-gradient(180deg, rgba(248, 250, 252, 0.88), rgba(255, 255, 255, 0.94));
     }
 }
+
+@media (max-width: 1023px) {
+    .workspace-account-panel {
+        width: min(20rem, calc(100vw - 1.5rem));
+    }
+}
+
+@media (max-width: 639px) {
+    .workspace-shell,
+    .workspace-profile-shell {
+        background:
+            radial-gradient(circle at top left, rgba(15, 118, 110, 0.1), transparent 34%),
+            radial-gradient(circle at top right, rgba(217, 119, 6, 0.08), transparent 28%),
+            linear-gradient(180deg, #f7f3ea 0%, #fcfaf5 48%, #f8f5ef 100%);
+    }
+
+    .workspace-panel,
+    .workspace-form-card,
+    .workspace-stat-card,
+    .workspace-list-card,
+    .workspace-empty,
+    .workspace-side-note,
+    .workspace-section-panel,
+    .workspace-modal-surface {
+        box-shadow: 0 16px 32px rgba(15, 23, 42, 0.07);
+    }
+
+    .workspace-kicker {
+        font-size: 0.66rem;
+        letter-spacing: 0.2em;
+    }
+
+    .workspace-account-trigger {
+        gap: 0.65rem;
+        padding: 0.4rem 0.65rem 0.4rem 0.45rem;
+    }
+
+    .workspace-account-avatar {
+        height: 2.25rem;
+        width: 2.25rem;
+    }
+
+    .workspace-account-link {
+        padding: 0.72rem 0.85rem;
+    }
+
+    .workspace-section-shell {
+        padding-top: 0.75rem;
+        padding-bottom: 0.75rem;
+    }
+
+    .workspace-section-title h3 {
+        font-size: 1.35rem;
+    }
+}

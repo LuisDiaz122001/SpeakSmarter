@@ -109,13 +109,13 @@ const deleteLesson = (id) => {
         <div class="workspace-shell py-8 sm:py-10">
             <div class="mx-auto flex max-w-7xl flex-col gap-6 px-4 sm:px-6 lg:px-8">
                 <section
-                    class="workspace-hero rounded-[2rem] px-6 py-8 text-white sm:px-8"
+                    class="workspace-hero rounded-[1.5rem] px-4 py-6 text-white sm:rounded-[2rem] sm:px-8 sm:py-8"
                     style="background: linear-gradient(135deg, rgba(20, 33, 61, 0.98), rgba(194, 65, 12, 0.92));"
                 >
                     <div class="relative z-10 grid gap-8 lg:grid-cols-[1.7fr_0.9fr]">
                         <div class="space-y-4">
                             <p class="text-xs uppercase tracking-[0.35em] text-white/70">Lessons</p>
-                            <h2 class="workspace-display max-w-2xl text-4xl leading-tight sm:text-5xl">
+                            <h2 class="workspace-display max-w-2xl text-3xl leading-tight sm:text-4xl lg:text-5xl">
                                 Keep each lesson readable, reusable and ready for class.
                             </h2>
                             <p class="max-w-2xl text-sm leading-7 text-white/78 sm:text-base">
@@ -155,14 +155,14 @@ const deleteLesson = (id) => {
                     </div>
                 </section>
 
-                <section class="grid gap-4 md:grid-cols-2 xl:grid-cols-5">
+                <section class="grid gap-4 sm:grid-cols-2 xl:grid-cols-5">
                     <article
                         v-for="card in statCards"
                         :key="card.title"
                         class="workspace-stat-card rounded-[1.5rem] p-5"
                     >
                         <p class="workspace-kicker">{{ card.title }}</p>
-                        <p class="workspace-display mt-4 text-4xl text-slate-900">{{ card.value }}</p>
+                        <p class="workspace-display mt-4 text-3xl text-slate-900 sm:text-4xl">{{ card.value }}</p>
                         <p class="mt-3 text-sm leading-7 text-slate-600">{{ card.note }}</p>
                     </article>
                 </section>

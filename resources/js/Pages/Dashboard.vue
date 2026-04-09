@@ -118,7 +118,7 @@ const displayPrice = (lesson) => {
 
         <div class="dashboard-shell py-8 sm:py-10">
             <div class="mx-auto flex max-w-7xl flex-col gap-6 px-4 sm:px-6 lg:px-8">
-                <section class="dashboard-hero relative overflow-hidden rounded-[2rem] px-6 py-8 text-white shadow-[0_30px_80px_rgba(15,23,42,0.24)] sm:px-8">
+                <section class="dashboard-hero relative overflow-hidden rounded-[1.5rem] px-4 py-6 text-white shadow-[0_30px_80px_rgba(15,23,42,0.24)] sm:rounded-[2rem] sm:px-8 sm:py-8">
                     <div class="hero-orb hero-orb-left" />
                     <div class="hero-orb hero-orb-right" />
 
@@ -126,7 +126,7 @@ const displayPrice = (lesson) => {
                         <div class="space-y-5">
                             <div class="space-y-3">
                                 <p class="text-xs uppercase tracking-[0.35em] text-white/70">Today at a glance</p>
-                                <h1 class="display-title max-w-2xl text-4xl leading-tight sm:text-5xl">
+                                <h1 class="display-title max-w-2xl text-3xl leading-tight sm:text-4xl lg:text-5xl">
                                     Teach with more clarity, not more clutter.
                                 </h1>
                                 <p class="max-w-2xl text-sm leading-7 text-white/78 sm:text-base">
@@ -135,8 +135,8 @@ const displayPrice = (lesson) => {
                             </div>
 
                             <div class="flex flex-wrap items-center gap-3 text-sm text-white/80">
-                                <span class="rounded-full border border-white/20 bg-white/10 px-4 py-2">Completion: {{ overview.completion }}%</span>
-                                <span class="rounded-full border border-white/20 bg-white/10 px-4 py-2">{{ roles.length ? roles.join(' / ') : 'No roles assigned yet' }}</span>
+                                <span class="w-full rounded-full border border-white/20 bg-white/10 px-4 py-2 sm:w-auto">Completion: {{ overview.completion }}%</span>
+                                <span class="w-full rounded-full border border-white/20 bg-white/10 px-4 py-2 sm:w-auto">{{ roles.length ? roles.join(' / ') : 'No roles assigned yet' }}</span>
                             </div>
                         </div>
 
@@ -167,7 +167,7 @@ const displayPrice = (lesson) => {
                     </div>
                 </section>
 
-                <section class="grid gap-4 md:grid-cols-2 xl:grid-cols-4">
+                <section class="grid gap-4 sm:grid-cols-2 xl:grid-cols-4">
                     <article
                         v-for="card in statCards"
                         :key="card.title"
@@ -175,7 +175,7 @@ const displayPrice = (lesson) => {
                         :class="`metric-card--${card.tone}`"
                     >
                         <p class="metric-kicker text-xs uppercase tracking-[0.28em]">{{ card.title }}</p>
-                        <p class="mt-4 display-title text-4xl text-slate-900">{{ card.value }}</p>
+                        <p class="mt-4 display-title text-3xl text-slate-900 sm:text-4xl">{{ card.value }}</p>
                         <p class="mt-3 text-sm leading-7 text-slate-600">{{ card.note }}</p>
                     </article>
                 </section>
@@ -183,7 +183,7 @@ const displayPrice = (lesson) => {
                 <section class="grid gap-6 xl:grid-cols-[1.55fr_1fr]">
                     <div class="space-y-6">
                         <article class="dashboard-panel rounded-[1.75rem] p-6">
-                            <div class="flex items-center justify-between gap-4">
+                            <div class="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
                                 <div>
                                     <p class="text-xs uppercase tracking-[0.28em] text-slate-500">Didactic roadmap</p>
                                     <h3 class="mt-2 display-title text-2xl text-slate-900">A simple path to a more teachable platform</h3>
@@ -215,7 +215,7 @@ const displayPrice = (lesson) => {
                         </article>
 
                         <article class="dashboard-panel rounded-[1.75rem] p-6">
-                            <div class="flex items-center justify-between gap-4">
+                            <div class="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
                                 <div>
                                     <p class="text-xs uppercase tracking-[0.28em] text-slate-500">Latest lessons</p>
                                     <h3 class="mt-2 display-title text-2xl text-slate-900">Content that was touched recently</h3>
@@ -468,5 +468,25 @@ const displayPrice = (lesson) => {
 
 .metric-card--ink .metric-kicker {
     color: var(--dashboard-ink);
+}
+
+@media (max-width: 639px) {
+    .dashboard-panel {
+        box-shadow: 0 18px 34px rgba(15, 23, 42, 0.07);
+    }
+
+    .hero-orb-left {
+        top: -2rem;
+        left: -1.5rem;
+        height: 7rem;
+        width: 7rem;
+    }
+
+    .hero-orb-right {
+        right: -1.5rem;
+        bottom: -2rem;
+        height: 8rem;
+        width: 8rem;
+    }
 }
 </style>

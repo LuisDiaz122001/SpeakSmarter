@@ -48,13 +48,13 @@ const form = useForm({
         <div class="workspace-shell py-8 sm:py-10">
             <div class="mx-auto flex max-w-7xl flex-col gap-6 px-4 sm:px-6 lg:px-8">
                 <section
-                    class="workspace-hero rounded-[2rem] px-6 py-8 text-white sm:px-8"
+                    class="workspace-hero rounded-[1.5rem] px-4 py-6 text-white sm:rounded-[2rem] sm:px-8 sm:py-8"
                     style="background: linear-gradient(135deg, rgba(20, 33, 61, 0.98), rgba(37, 99, 235, 0.9));"
                 >
                     <div class="relative z-10 flex flex-col gap-5 lg:flex-row lg:items-end lg:justify-between">
                         <div class="max-w-3xl">
                             <p class="text-xs uppercase tracking-[0.35em] text-white/70">Alta de usuario</p>
-                            <h2 class="workspace-display mt-3 text-4xl leading-tight sm:text-5xl">
+                            <h2 class="workspace-display mt-3 text-3xl leading-tight sm:text-4xl lg:text-5xl">
                                 Entrega acceso listo para usar sin depender de un registro manual.
                             </h2>
                             <p class="mt-3 text-sm leading-7 text-white/78 sm:text-base">

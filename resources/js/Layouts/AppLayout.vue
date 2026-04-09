@@ -68,34 +68,34 @@ const logout = () => {
                             </div>
 
                             <!-- Navigation Links -->
-                            <div class="hidden space-x-8 sm:-my-px sm:ms-10 sm:flex">
+                            <div class="hidden space-x-8 lg:-my-px lg:ms-10 lg:flex">
                                 <NavLink :href="route('dashboard')" :active="route().current('dashboard')">
                                     Dashboard
                                 </NavLink>
                             </div>
-                            <div class="hidden space-x-8 sm:-my-px sm:ms-10 sm:flex" v-if="$page.props.user.permissions.some(p => p.trim() === 'read categories')">
+                            <div class="hidden space-x-8 lg:-my-px lg:ms-10 lg:flex" v-if="$page.props.user.permissions.some(p => p.trim() === 'read categories')">
                                 <NavLink :href="route('categories.index')" :active="route().current('categories.*')">
                                     Categories
                                 </NavLink>
                             </div>
-                            <div class="hidden space-x-8 sm:-my-px sm:ms-10 sm:flex" v-if="$page.props.user.permissions.some(p => p.trim() === 'read lessons')">
+                            <div class="hidden space-x-8 lg:-my-px lg:ms-10 lg:flex" v-if="$page.props.user.permissions.some(p => p.trim() === 'read lessons')">
                                 <NavLink :href="route('lessons.index')" :active="route().current('lessons.*')">
                                     Lessons
                                 </NavLink>
                             </div>
-                            <div class="hidden space-x-8 sm:-my-px sm:ms-10 sm:flex" v-if="$page.props.user.permissions.some(p => p.trim() === 'read roles')">
+                            <div class="hidden space-x-8 lg:-my-px lg:ms-10 lg:flex" v-if="$page.props.user.permissions.some(p => p.trim() === 'read roles')">
                                 <NavLink :href="route('roles.index')" :active="route().current('roles.*')">
                                     Roles
                                 </NavLink>
                             </div>
-                            <div class="hidden space-x-8 sm:-my-px sm:ms-10 sm:flex" v-if="$page.props.user.permissions.some(p => p.trim() === 'read users')">
+                            <div class="hidden space-x-8 lg:-my-px lg:ms-10 lg:flex" v-if="$page.props.user.permissions.some(p => p.trim() === 'read users')">
                                 <NavLink :href="route('users.index')" :active="route().current('users.*')">
                                     Usuarios
                                 </NavLink>
                             </div>
                         </div>
 
-                        <div class="hidden sm:flex sm:items-center sm:ms-6">
+                        <div class="hidden lg:flex lg:items-center lg:ms-6">
                             <div class="ms-3 relative">
                                 <!-- Teams Dropdown -->
                                 <Dropdown v-if="$page.props.jetstream.hasTeamFeatures" align="right" width="60">
@@ -225,7 +225,7 @@ const logout = () => {
                         </div>
 
                         <!-- Hamburger -->
-                        <div class="-me-2 flex items-center sm:hidden">
+                        <div class="-me-2 flex items-center lg:hidden">
                             <button class="inline-flex items-center justify-center p-2 rounded-md text-gray-400 hover:text-gray-500 hover:bg-gray-100 focus:outline-none focus:bg-gray-100 focus:text-gray-500 transition duration-150 ease-in-out" @click="showingNavigationDropdown = ! showingNavigationDropdown">
                                 <svg
                                     class="size-6"
@@ -254,7 +254,7 @@ const logout = () => {
                 </div>
 
                 <!-- Responsive Navigation Menu -->
-                <div :class="{'block': showingNavigationDropdown, 'hidden': ! showingNavigationDropdown}" class="sm:hidden">
+                <div :class="{'block': showingNavigationDropdown, 'hidden': ! showingNavigationDropdown}" class="lg:hidden">
                     <div class="pt-2 pb-3 space-y-1">
                         <ResponsiveNavLink :href="route('dashboard')" :active="route().current('dashboard')">
                             Dashboard

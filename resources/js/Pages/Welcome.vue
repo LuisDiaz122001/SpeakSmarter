@@ -140,7 +140,7 @@ const priceCaption = (lesson) => {
         </div>
 
         <div class="relative mx-auto flex min-h-screen max-w-7xl flex-col px-4 sm:px-6 lg:px-8">
-            <header class="flex items-center justify-between py-6">
+            <header class="flex flex-col gap-4 py-6 sm:flex-row sm:items-center sm:justify-between">
                 <div class="flex items-center gap-3">
                     <div class="flex h-11 w-11 items-center justify-center rounded-2xl bg-slate-900 text-sm font-semibold text-white shadow-[0_18px_40px_rgba(15,23,42,0.16)]">
                         SS
@@ -157,18 +157,18 @@ const priceCaption = (lesson) => {
                     <a href="#pricing" class="text-sm font-medium text-slate-600 transition hover:text-slate-900">Precios</a>
                 </div>
 
-                <div class="flex items-center gap-3">
+                <div class="flex w-full flex-col gap-3 sm:w-auto sm:flex-row sm:items-center">
                     <Link
                         v-if="canLogin"
                         :href="authPrimaryHref"
-                        class="inline-flex rounded-full bg-slate-900 px-4 py-2 text-sm font-semibold text-white transition hover:bg-slate-800"
+                        class="inline-flex w-full justify-center rounded-full bg-slate-900 px-4 py-2 text-sm font-semibold text-white transition hover:bg-slate-800 sm:w-auto"
                     >
                         {{ authPrimaryLabel }}
                     </Link>
                     <Link
                         v-if="!isAuthenticated && canRegister"
                         :href="route('register')"
-                        class="hidden rounded-full border border-slate-200 px-4 py-2 text-sm font-semibold text-slate-700 transition hover:border-slate-300 hover:text-slate-900 sm:inline-flex"
+                        class="inline-flex w-full justify-center rounded-full border border-slate-200 px-4 py-2 text-sm font-semibold text-slate-700 transition hover:border-slate-300 hover:text-slate-900 sm:w-auto"
                     >
                         Crear cuenta
                     </Link>
@@ -176,7 +176,7 @@ const priceCaption = (lesson) => {
             </header>
 
             <main class="flex-1 py-4 sm:py-8">
-                <section class="workspace-hero rounded-[2rem] px-6 py-8 text-white sm:px-8 lg:px-10">
+                <section class="workspace-hero rounded-[1.5rem] px-4 py-6 text-white sm:rounded-[2rem] sm:px-8 sm:py-8 lg:px-10">
                     <div
                         class="absolute inset-0"
                         style="background: linear-gradient(135deg, rgba(20, 33, 61, 0.98), rgba(15, 118, 110, 0.9));"
@@ -186,7 +186,7 @@ const priceCaption = (lesson) => {
                         <div class="space-y-6">
                             <div class="space-y-4">
                                 <p class="text-xs uppercase tracking-[0.35em] text-white/70">Landing comercial</p>
-                                <h1 class="workspace-display max-w-3xl text-4xl leading-tight sm:text-5xl lg:text-6xl">
+                                <h1 class="workspace-display max-w-3xl text-3xl leading-tight sm:text-5xl lg:text-6xl">
                                     Muestra cada leccion con su precio y convierte la portada en una experiencia de venta mas clara.
                                 </h1>
                                 <p class="max-w-2xl text-sm leading-7 text-white/78 sm:text-base">
@@ -197,13 +197,13 @@ const priceCaption = (lesson) => {
                             <div class="flex flex-wrap items-center gap-3">
                                 <a
                                     href="#lessons"
-                                    class="inline-flex rounded-full bg-white px-5 py-3 text-sm font-semibold text-slate-900 transition hover:bg-slate-100"
+                                    class="inline-flex w-full justify-center rounded-full bg-white px-5 py-3 text-sm font-semibold text-slate-900 transition hover:bg-slate-100 sm:w-auto"
                                 >
                                     Ver lecciones destacadas
                                 </a>
                                 <a
                                     href="#pricing"
-                                    class="inline-flex rounded-full border border-white/20 bg-white/10 px-5 py-3 text-sm font-semibold text-white transition hover:bg-white/20"
+                                    class="inline-flex w-full justify-center rounded-full border border-white/20 bg-white/10 px-5 py-3 text-sm font-semibold text-white transition hover:bg-white/20 sm:w-auto"
                                 >
                                     Explorar precios
                                 </a>
@@ -262,14 +262,14 @@ const priceCaption = (lesson) => {
                     </div>
                 </section>
 
-                <section class="mt-6 grid gap-4 md:grid-cols-2 xl:grid-cols-4">
+                <section class="mt-6 grid gap-4 sm:grid-cols-2 xl:grid-cols-4">
                     <article
                         v-for="card in stats"
                         :key="card.title"
                         class="workspace-stat-card rounded-[1.5rem] p-5"
                     >
                         <p class="workspace-kicker">{{ card.title }}</p>
-                        <p class="workspace-display mt-4 text-4xl text-slate-900">{{ card.value }}</p>
+                        <p class="workspace-display mt-4 text-3xl text-slate-900 sm:text-4xl">{{ card.value }}</p>
                         <p class="mt-3 text-sm leading-7 text-slate-600">{{ card.note }}</p>
                     </article>
                 </section>
@@ -343,7 +343,7 @@ const priceCaption = (lesson) => {
                                     </div>
                                 </div>
 
-                                <div class="min-w-[12rem] rounded-[1.35rem] bg-slate-50 px-4 py-4">
+                                <div class="w-full min-w-0 rounded-[1.35rem] bg-slate-50 px-4 py-4 lg:min-w-[12rem] lg:w-auto">
                                     <p class="text-xs uppercase tracking-[0.2em] text-slate-400">Precio publico</p>
                                     <p class="mt-3 workspace-display text-3xl text-slate-900">{{ displayPrice(lesson) }}</p>
                                     <p class="mt-2 text-sm leading-6 text-slate-600">{{ priceCaption(lesson) }}</p>
@@ -435,7 +435,7 @@ const priceCaption = (lesson) => {
                     </div>
                 </section>
 
-                <section class="mt-6 workspace-hero rounded-[2rem] px-6 py-8 text-white sm:px-8">
+                <section class="mt-6 workspace-hero rounded-[1.5rem] px-4 py-6 text-white sm:rounded-[2rem] sm:px-8 sm:py-8">
                     <div
                         class="absolute inset-0"
                         style="background: linear-gradient(135deg, rgba(15, 23, 42, 0.98), rgba(194, 65, 12, 0.9));"
@@ -444,7 +444,7 @@ const priceCaption = (lesson) => {
                     <div class="relative z-10 flex flex-col gap-6 lg:flex-row lg:items-end lg:justify-between">
                         <div class="max-w-3xl">
                             <p class="text-xs uppercase tracking-[0.35em] text-white/70">Siguiente paso</p>
-                            <h2 class="workspace-display mt-3 text-4xl leading-tight sm:text-5xl">
+                            <h2 class="workspace-display mt-3 text-3xl leading-tight sm:text-5xl">
                                 La portada ya puede vender mejor. El siguiente movimiento es poblarla con lecciones reales y precios claros.
                             </h2>
                             <p class="mt-3 text-sm leading-7 text-white/78 sm:text-base">
@@ -455,14 +455,14 @@ const priceCaption = (lesson) => {
                         <div class="flex flex-wrap gap-3">
                             <a
                                 href="#lessons"
-                                class="inline-flex rounded-full bg-white px-5 py-3 text-sm font-semibold text-slate-900 transition hover:bg-slate-100"
+                                class="inline-flex w-full justify-center rounded-full bg-white px-5 py-3 text-sm font-semibold text-slate-900 transition hover:bg-slate-100 sm:w-auto"
                             >
                                 Revisar catalogo
                             </a>
                             <Link
                                 v-if="canLogin"
                                 :href="authPrimaryHref"
-                                class="inline-flex rounded-full border border-white/20 bg-white/10 px-5 py-3 text-sm font-semibold text-white transition hover:bg-white/20"
+                                class="inline-flex w-full justify-center rounded-full border border-white/20 bg-white/10 px-5 py-3 text-sm font-semibold text-white transition hover:bg-white/20 sm:w-auto"
                             >
                                 {{ authPrimaryLabel }}
                             </Link>
