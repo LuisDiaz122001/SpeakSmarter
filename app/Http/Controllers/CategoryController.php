@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use App\Models\Category;
 use Inertia\Response;
 use App\Http\Requests\CategoryRequest;
+use BcMath\Number;
 
 class CategoryController extends Controller
 {
@@ -14,7 +15,8 @@ class CategoryController extends Controller
      */
     public function index()
     {
-        $categories = Category::paginate(10);
+        define('Number_Of_Items_Per_Page', 25);
+        $categories = Category::paginate(Number_Of_Items_Per_Page);
         return inertia('Categories/Index', ['categories' => $categories]);
     }
 
@@ -40,14 +42,15 @@ class CategoryController extends Controller
     /**
      * Display the specified resource.
      */
-    public function show(string $id)
+    public function show(Category $category)
     {
         //
     }
 
     /**
      * Show the form for editing the specified resource.
-     * @param int $id
+     * 
+     * @param Category $category
      * @return \Illuminate\Http\Response
      */
     public function edit(Category $category)
@@ -57,8 +60,9 @@ class CategoryController extends Controller
 
     /**
      * Update the specified resource in storage.
+     * 
      * @param App\Http\Requests\CategoryRequest $request
-     * @param int $id
+     * @param Category $category
      * @return \Illuminate\Http\Response
      */
     public function update(CategoryRequest $request, Category $category)
@@ -69,9 +73,13 @@ class CategoryController extends Controller
 
     /**
      * Remove the specified resource from storage.
+     * 
+     * @param Category $category
+     * @return \Illuminate\Http\Response
      */
-    public function destroy(string $id)
+    public function destroy(Category $category)
     {
-        //
+        $category->delete();
+        return redirect()->route('categories.index');
     }
 }

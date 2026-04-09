@@ -6,7 +6,7 @@ export default {
 
 <script setup>
     import AppLayout from '@/Layouts/AppLayout.vue';
-    import { Link } from '@inertiajs/vue3';
+    import { Link, router } from '@inertiajs/vue3';
 
     defineProps({
         categories: {
@@ -17,7 +17,7 @@ export default {
 
     const deleteCategory = (id) => {
         if (confirm('Are you sure you want to delete this category?')) {
-            inertia.deleteCategory(route('categories.destroy', id));
+            router.delete(route('categories.destroy', id));
         }
     };
 
@@ -44,13 +44,19 @@ export default {
                             </div>
                             </div>
                             <div class="hidden shrink-0 sm:flex sm:flex-col sm:items-end">
-                                <p class="text-md leading-6 text-gray-900">
-                                    <Link :href="route('categories.edit', category.id)" v-if="$page.props.user.permissions.some(p => p.trim() === 'update categories')">Edit</Link>
-                                    <Link @click="deleteCategory(category.id)" v-if="$page.props.user.permissions.some(p => p.trim() === 'delete categories')">Delete</Link>
+                                <p class="flex items-center gap-2">
+                                    <Link :href="route('categories.edit', category.id)" v-if="$page.props.user.permissions.some(p => p.trim() === 'update categories')" class="inline-flex items-center px-4 py-2 rounded-lg bg-blue-600 text-white text-sm font-medium shadow-sm hover:bg-blue-700 hover:shadow-md transition duration-200">Edit</Link>
+                                    <button type="button" @click="deleteCategory(category.id)" v-if="$page.props.user.permissions.some(p => p.trim() === 'delete categories')" class="inline-flex items-center px-4 py-2 rounded-lg bg-red-600 text-white text-sm font-medium shadow-sm hover:bg-red-700 hover:shadow-md transition duration-200">Delete</button>
                                 </p>
                             </div>
                         </li>
                     </ul>
+                </div>
+                <div class="flex justify-between mt-2">
+                    <Link v-if="categories.current_page > 1" :href="categories.prev_page_url" class="px-4 py-2 rounded-md">PREVIOUS</Link>
+                    <div v-else></div>
+                    <Link v-if="categories.current_page < categories.last_page" :href="categories.next_page_url" class="px-4 py-2 rounded-md">NEXT</Link>
+                    <div v-else></div>
                 </div>
             </div>
             </div>
