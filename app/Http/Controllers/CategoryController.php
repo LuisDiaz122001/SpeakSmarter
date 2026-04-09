@@ -2,22 +2,36 @@
 
 namespace App\Http\Controllers;
 
-use Illuminate\Http\Request;
-use App\Models\Category;
-use Inertia\Response;
 use App\Http\Requests\CategoryRequest;
-use BcMath\Number;
+use App\Models\Category;
 
 class CategoryController extends Controller
 {
-    const Number_Of_Items_Per_Page = 25;
+    private const ITEMS_PER_PAGE = 25;
+
     /**
      * Display a listing of the resource.
      */
     public function index()
     {
-        $categories = Category::paginate(self::Number_Of_Items_Per_Page);
-        return inertia('Categories/Index', ['categories' => $categories]);
+        $categories = Category::query()
+            ->withCount('lessons')
+            ->orderBy('name')
+            ->paginate(self::ITEMS_PER_PAGE);
+
+        return inertia('Categories/Index', [
+            'categories' => $categories->through(fn (Category $category) => [
+                'id' => $category->id,
+                'name' => $category->name,
+                'lessons_count' => $category->lessons_count,
+                'updated_at' => $category->updated_at->diffForHumans(),
+            ]),
+            'overview' => [
+                'total' => Category::count(),
+                'with_lessons' => Category::query()->has('lessons')->count(),
+                'empty' => Category::query()->doesntHave('lessons')->count(),
+            ],
+        ]);
     }
 
     /**
@@ -30,27 +44,20 @@ class CategoryController extends Controller
 
     /**
      * Store a newly created resource in storage.
-     * @param App\Http\Requests\CategoryRequest $request
-      * @return \Illuminate\hHttp\Response
+     *
+     * @param  App\Http\Requests\CategoryRequest  $request
+     * @return Response
      */
     public function store(CategoryRequest $request)
     {
         Category::create($request->validated());
+
         return redirect()->route('categories.index');
     }
 
     /**
-     * Display the specified resource.
-     */
-    public function show(Category $category)
-    {
-        //
-    }
-
-    /**
      * Show the form for editing the specified resource.
-     * 
-     * @param Category $category
+     *
      * @return \Illuminate\Http\Response
      */
     public function edit(Category $category)
@@ -60,26 +67,26 @@ class CategoryController extends Controller
 
     /**
      * Update the specified resource in storage.
-     * 
-     * @param App\Http\Requests\CategoryRequest $request
-     * @param Category $category
+     *
+     * @param  App\Http\Requests\CategoryRequest  $request
      * @return \Illuminate\Http\Response
      */
     public function update(CategoryRequest $request, Category $category)
     {
         $category->update($request->validated());
+
         return redirect()->route('categories.index');
     }
 
     /**
      * Remove the specified resource from storage.
-     * 
-     * @param Category $category
+     *
      * @return \Illuminate\Http\Response
      */
     public function destroy(Category $category)
     {
         $category->delete();
+
         return redirect()->route('categories.index');
     }
 }

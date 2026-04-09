@@ -10,11 +10,14 @@ class CategoryRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
-     * @return bool
      */
-    public function authorize()
+    public function authorize(): bool
     {
-        return true;
+        return match ($this->route()?->getActionMethod()) {
+            'store' => $this->user()?->can('create categories') ?? false,
+            'update' => $this->user()?->can('update categories') ?? false,
+            default => false,
+        };
     }
 
     /**
@@ -22,13 +25,19 @@ class CategoryRequest extends FormRequest
      *
      * @return array<string, ValidationRule|array<mixed>|string>
      */
-    public function rules()
+    public function rules(): array
     {
         return [
-            'name' => ['required', 'string', 'max:100', Rule::unique(table: 'categories', column: 'name')->ignore(id: request('category'), idColumn: 'id')],
+            'name' => [
+                'required',
+                'string',
+                'max:100',
+                Rule::unique('categories', 'name')->ignore($this->route('category')),
+            ],
         ];
     }
-    public function messages()
+
+    public function messages(): array
     {
         return [
             'name.required' => 'The category name is required.',

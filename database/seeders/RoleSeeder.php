@@ -2,7 +2,6 @@
 
 namespace Database\Seeders;
 
-use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
 use Spatie\Permission\Models\Permission;
 use Spatie\Permission\Models\Role;
@@ -14,34 +13,36 @@ class RoleSeeder extends Seeder
      */
     public function run(): void
     {
-        /* * Roles
-        */
-        $role_admin = Role::create(['name' => 'admin']);
-        $role_editor = Role::create(['name' => 'editor']);
+        $role_admin = Role::firstOrCreate([
+            'name' => 'admin',
+            'guard_name' => 'web',
+        ]);
+        $role_editor = Role::firstOrCreate([
+            'name' => 'editor',
+            'guard_name' => 'web',
+        ]);
+        $role_client = Role::firstOrCreate([
+            'name' => 'client',
+            'guard_name' => 'web',
+        ]);
 
-        /* * Permissions for Role
-        */
-        $permissions_create_role = Permission::create(['name' => 'create roles']);
-        $permissions_read_role = Permission::create(['name' => 'read roles']);
-        $permissions_edit_role = Permission::create(['name' => 'edit roles']);
-        $permissions_delete_role = Permission::create(['name' => 'delete roles']);
-        $permissions_update_role = Permission::create(['name' => 'update roles']);
+        $permissions_create_role = Permission::firstOrCreate(['name' => 'create roles', 'guard_name' => 'web']);
+        $permissions_read_role = Permission::firstOrCreate(['name' => 'read roles', 'guard_name' => 'web']);
+        $permissions_edit_role = Permission::firstOrCreate(['name' => 'edit roles', 'guard_name' => 'web']);
+        $permissions_delete_role = Permission::firstOrCreate(['name' => 'delete roles', 'guard_name' => 'web']);
+        $permissions_update_role = Permission::firstOrCreate(['name' => 'update roles', 'guard_name' => 'web']);
 
-        /* * Permissions for Lessons
-        */
-        $permissions_create_lesson = Permission::create(['name' => 'create lessons']);
-        $permissions_read_lesson = Permission::create(['name' => 'read lessons']);
-        $permissions_edit_lesson = Permission::create(['name' => 'edit lessons']);
-        $permissions_delete_lesson = Permission::create(['name' => 'delete lessons']);
-        $permissions_update_lesson = Permission::create(['name' => 'update lessons']);
+        $permissions_create_lesson = Permission::firstOrCreate(['name' => 'create lessons', 'guard_name' => 'web']);
+        $permissions_read_lesson = Permission::firstOrCreate(['name' => 'read lessons', 'guard_name' => 'web']);
+        $permissions_edit_lesson = Permission::firstOrCreate(['name' => 'edit lessons', 'guard_name' => 'web']);
+        $permissions_delete_lesson = Permission::firstOrCreate(['name' => 'delete lessons', 'guard_name' => 'web']);
+        $permissions_update_lesson = Permission::firstOrCreate(['name' => 'update lessons', 'guard_name' => 'web']);
 
-        /* * Permissions for Category
-        */
-        $permissions_create_category = Permission::create(['name' => 'create categories']);
-        $permissions_read_category = Permission::create(['name' => 'read categories']);
-        $permissions_edit_category = Permission::create(['name' => 'edit categories']);
-        $permissions_delete_category = Permission::create(['name' => 'delete categories']);
-        $permissions_update_category = Permission::create(['name' => 'update categories']);
+        $permissions_create_category = Permission::firstOrCreate(['name' => 'create categories', 'guard_name' => 'web']);
+        $permissions_read_category = Permission::firstOrCreate(['name' => 'read categories', 'guard_name' => 'web']);
+        $permissions_edit_category = Permission::firstOrCreate(['name' => 'edit categories', 'guard_name' => 'web']);
+        $permissions_delete_category = Permission::firstOrCreate(['name' => 'delete categories', 'guard_name' => 'web']);
+        $permissions_update_category = Permission::firstOrCreate(['name' => 'update categories', 'guard_name' => 'web']);
 
         $permissions_admin = [
             $permissions_create_role,
@@ -58,24 +59,28 @@ class RoleSeeder extends Seeder
             $permissions_read_category,
             $permissions_edit_category,
             $permissions_delete_category,
-            $permissions_update_category
+            $permissions_update_category,
         ];
 
         $permissions_editor = [
             $permissions_create_lesson,
             $permissions_read_lesson,
             $permissions_edit_lesson,
+            $permissions_update_lesson,
             $permissions_create_category,
             $permissions_read_category,
             $permissions_edit_category,
             $permissions_delete_category,
-            $permissions_update_category
+            $permissions_update_category,
         ];
 
-        /* * Assign Permissions to Role
-        */
+        $permissions_client = [
+            $permissions_read_lesson,
+            $permissions_read_category,
+        ];
+
         $role_admin->syncPermissions($permissions_admin);
         $role_editor->syncPermissions($permissions_editor);
-
+        $role_client->syncPermissions($permissions_client);
     }
 }

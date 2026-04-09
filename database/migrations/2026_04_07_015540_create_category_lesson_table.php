@@ -12,18 +12,18 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create('category_lesson', function (Blueprint $table) {
-        $table->id();
+            $table->id();
 
-        $table->foreignId('category_id')
-            ->constrained()
-            ->cascadeOnDelete();
+            $table->foreignId('category_id')
+                ->constrained()
+                ->cascadeOnDelete();
 
-        $table->foreignId('lesson_id')
-            ->constrained()
-            ->cascadeOnDelete();
+            $table->foreignId('lesson_id')
+                ->constrained()
+                ->cascadeOnDelete();
 
-        $table->timestamps();
-    });
+            $table->timestamps();
+        });
     }
 
     /**

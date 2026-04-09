@@ -2,9 +2,8 @@
 
 namespace Database\Seeders;
 
-use Illuminate\Database\Console\Seeds\WithoutModelEvents;
-use Illuminate\Database\Seeder;
 use App\Models\Level;
+use Illuminate\Database\Seeder;
 
 class LevelSeeder extends Seeder
 {
@@ -13,23 +12,7 @@ class LevelSeeder extends Seeder
      */
     public function run(): void
     {
-        Level::create([
-            'name' => 'A1',
-        ]);
-        Level::create([
-            'name' => 'A2',
-        ]);
-        Level::create([
-            'name' => 'B1',
-        ]);
-        Level::create([
-            'name' => 'B2',
-        ]);
-        Level::create([
-            'name' => 'C1',
-        ]);
-        Level::create([
-            'name' => 'C2',
-        ]);
+        collect(['A1', 'A2', 'B1', 'B2', 'C1', 'C2'])
+            ->each(fn (string $level) => Level::firstOrCreate(['name' => $level]));
     }
 }

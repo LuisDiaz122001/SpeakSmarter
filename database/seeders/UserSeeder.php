@@ -2,9 +2,8 @@
 
 namespace Database\Seeders;
 
-use Illuminate\Database\Console\Seeds\WithoutModelEvents;
-use Illuminate\Database\Seeder;
 use App\Models\User;
+use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\Hash;
 
 class UserSeeder extends Seeder
@@ -14,18 +13,28 @@ class UserSeeder extends Seeder
      */
     public function run(): void
     {
-        $admin = User::create([
-            'name' => 'Admin',
+        $admin = User::updateOrCreate([
             'email' => 'admin@speaksmarter.com',
-            'password' => Hash::make ('admin1234'),
+        ], [
+            'name' => 'Admin',
+            'password' => Hash::make('admin1234'),
         ]);
-        $admin->assignRole('admin');
+        $admin->syncRoles(['admin']);
 
-        $editor = User::create([
-            'name' => 'Editor',
+        $editor = User::updateOrCreate([
             'email' => 'editor@speaksmarter.com',
-            'password' => Hash::make ('editor1234'),
+        ], [
+            'name' => 'Editor',
+            'password' => Hash::make('editor1234'),
         ]);
-        $editor->assignRole('editor');
+        $editor->syncRoles(['editor']);
+
+        $client = User::updateOrCreate([
+            'email' => 'client@speaksmarter.com',
+        ], [
+            'name' => 'Client',
+            'password' => Hash::make('client1234'),
+        ]);
+        $client->syncRoles(['client']);
     }
 }
