@@ -10,13 +10,13 @@ use BcMath\Number;
 
 class CategoryController extends Controller
 {
+    const Number_Of_Items_Per_Page = 25;
     /**
      * Display a listing of the resource.
      */
     public function index()
     {
-        define('Number_Of_Items_Per_Page', 25);
-        $categories = Category::paginate(Number_Of_Items_Per_Page);
+        $categories = Category::paginate(self::Number_Of_Items_Per_Page);
         return inertia('Categories/Index', ['categories' => $categories]);
     }
 

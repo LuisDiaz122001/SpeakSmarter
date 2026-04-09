@@ -18,7 +18,7 @@ return new class extends Migration
         $table->string('image_uri', 255)->nullable();
         $table->string('content_uri', 255)->nullable();
         $table->string('pdf_uri', 255)->nullable();
-
+        $table->boolean('is_free')->default(false);
         $table->foreignId('level_id')
             ->nullable()
             ->constrained('levels')
